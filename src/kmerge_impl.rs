@@ -10,7 +10,7 @@ macro_rules! clone_fields {
         $name {
             $(
                 $field : $base . $field .clone()
-            ),*
+            ),+
         }
     );
 }

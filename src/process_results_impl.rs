@@ -6,7 +6,7 @@
 /// for more information.
 #[must_use = "iterator adaptors are lazy and do nothing unless consumed"]
 #[derive(Debug)]
-pub struct ProcessResults<'a, I, E: 'a> {
+pub struct ProcessResults<'a, I, E> {
     error: &'a mut Result<(), E>,
     iter: I,
 }
@@ -70,7 +70,7 @@ impl<'a, I, T, E> Iterator for ProcessResults<'a, I, E>
 /// ```
 pub fn process_results<I, F, T, E, R>(iterable: I, processor: F) -> Result<R, E>
     where I: IntoIterator<Item = Result<T, E>>,
-          F: FnOnce(ProcessResults<I::IntoIter, E>) -> R
+          F: FnOnce(ProcessResults<'_, I::IntoIter, E>) -> R
 {
     let iter = iterable.into_iter();
     let mut error = Ok(());

@@ -19,7 +19,7 @@ macro_rules! clone_fields {
         $name {
             $(
                 $field : $base . $field .clone()
-            ),*
+            ),+
         }
     );
 }
@@ -830,7 +830,7 @@ impl<I> Iterator for Dedup<I>
 ///
 /// See [`.take_while_ref()`](../trait.Itertools.html#method.take_while_ref) for more information.
 #[must_use = "iterator adaptors are lazy and do nothing unless consumed"]
-pub struct TakeWhileRef<'a, I: 'a, F> {
+pub struct TakeWhileRef<'a, I, F> {
     iter: &'a mut I,
     f: F,
 }
@@ -842,7 +842,7 @@ impl<'a, I, F> fmt::Debug for TakeWhileRef<'a, I, F>
 }
 
 /// Create a new `TakeWhileRef` from a reference to clonable iterator.
-pub fn take_while_ref<I, F>(iter: &mut I, f: F) -> TakeWhileRef<I, F>
+pub fn take_while_ref<I, F>(iter: &mut I, f: F) -> TakeWhileRef<'_, I, F>
     where I: Iterator + Clone
 {
     TakeWhileRef { iter: iter, f: f }
